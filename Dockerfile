@@ -1,4 +1,4 @@
-FROM mhart/alpine-node:6.3.1
+FROM mhart/alpine-node:6.9.4
 
 RUN apk add -U --virtual tools git sudo bash openssh-client && \
     adduser -D web && \
