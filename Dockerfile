@@ -15,4 +15,5 @@ LABEL polymer-cli="0.15.0"
 
 VOLUME ["/app","/home/web"]
 EXPOSE 8080
-ENTRYPOINT ["npm"]
+ENTRYPOINT ["polymer"]
+CMD ["serve","-H","0.0.0.0"]
