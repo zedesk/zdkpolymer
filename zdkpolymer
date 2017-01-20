@@ -1,0 +1,38 @@
+#!/bin/bash
+
+while getopts ":H" opt; do
+    case $opt in
+       H)
+          MOUNTHOME=1
+          ;;
+    esac
+done
+
+# get remaining args
+shift $(expr $OPTIND - 1 )
+
+APPNAME=$(basename $PWD)
+EXISTS=$(docker ps -a --format="{{.Names}}" | grep ${APPNAME})
+DOCKERCMD='docker run '
+
+if [ "$1" == "port" ]; then
+    docker port $APPNAME
+    exit 0
+fi
+
+if [ -z $EXISTS ]; then
+    DOCKERCMD='docker run '
+    OPTION=' -it --rm -v '$PWD':/app -P --name '$APPNAME
+    if [[ $DAEMON ]]; then
+        OPTION+=' -v $HOME:/home/web'
+    fi
+    ${DOCKERCMD} ${OPTION} zedesk/zdkpolymer $@
+else
+    if [ $# != 0 ]; then
+        DOCKERCMD='docker exec -it '$APPNAME
+        ${DOCKERCMD} $@
+    else
+        echo "need a command"
+        exit 1
+    fi
+fi
