@@ -23,13 +23,13 @@ fi
 if [ -z $EXISTS ]; then
     DOCKERCMD='docker run '
     OPTION=' -it --rm -v '$PWD':/app -P --name '$APPNAME
-    if [[ $DAEMON ]]; then
+    if [[ $MOUNTHOME ]]; then
         OPTION+=' -v $HOME:/home/web'
     fi
     ${DOCKERCMD} ${OPTION} zedesk/zdkpolymer $@
 else
     if [ $# != 0 ]; then
-        DOCKERCMD='docker exec -it '$APPNAME
+        DOCKERCMD='docker exec -it '$APPNAME' entrypoint.sh'
         ${DOCKERCMD} $@
     else
         echo "need a command"
