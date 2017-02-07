@@ -2,7 +2,7 @@ FROM mhart/alpine-node:6.9.4
 
 MAINTAINER F. Le Coz <fabrice.lecoz@zedesk.net>
 
-ENV POLYMER_CLI_VERSION=0.17.0
+ENV POLYMER_CLI_VERSION=0.18.0-alpha.9
 ENV BOWER_VERSION=1.8.0
 
 RUN apk add -U --virtual tools git sudo bash openssh-client && \
@@ -23,5 +23,5 @@ USER web
 
 VOLUME ["/app","/home/web"]
 WORKDIR "/app"
-EXPOSE 8080
+EXPOSE 8081
 ENTRYPOINT ["entrypoint.sh"]
