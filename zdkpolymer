@@ -24,7 +24,7 @@ if [ -z $EXISTS ]; then
     DOCKERCMD='docker run '
     OPTION=' -it --rm -v '$PWD':/app -P --name '$APPNAME
     if [[ $MOUNTHOME ]]; then
-        OPTION+=' -v $HOME:/home/web'
+        OPTION+=' -v '$HOME':/home/web'
     fi
     ${DOCKERCMD} ${OPTION} zedesk/zdkpolymer $@
 else
