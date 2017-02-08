@@ -13,7 +13,7 @@ RUN apk add -U --virtual tools git sudo bash openssh-client && \
 
 COPY entrypoint.sh /usr/local/bin
 
-LABEL POLYMER_VERSION=${POLYMER_VERSION} \
+LABEL POLYMER_VERSION=${POLYMER_CLI_VERSION} \
       NODE_VERSION="6.9.4" \
       NPM_VERSION="3" \
       BOWER_VERSION=${BOWER_VERSION}
