@@ -1,10 +1,13 @@
 #!/bin/bash
 
-while getopts ":H" opt; do
+while getopts ":H:D" opt; do
     case $opt in
-       H)
-          MOUNTHOME=1
-          ;;
+      H)
+        MOUNTHOME=1
+        ;;
+      D)
+        DAEMON=1
+        ;;
     esac
 done
 
@@ -22,7 +25,12 @@ fi
 
 if [ -z $EXISTS ]; then
     DOCKERCMD='docker run '
-    OPTION=' -it --rm -v '$PWD':/app -P --name '$APPNAME
+    OPTION=' --rm -v '$PWD':/app -P --name '$APPNAME
+    if [[ $DAEMON ]]; then
+      OPTION=' -d'$OPTION
+    else
+      OPTION=' -it'$OPTION
+    fi
     if [[ $MOUNTHOME ]]; then
         OPTION+=' -v '$HOME':/home/web'
     fi
@@ -32,7 +40,7 @@ else
         DOCKERCMD='docker exec -it '$APPNAME' entrypoint.sh'
         ${DOCKERCMD} $@
     else
-        echo "need a command"
+        echo "container ${APPNAME} already running : need a command"
         exit 1
     fi
 fi
