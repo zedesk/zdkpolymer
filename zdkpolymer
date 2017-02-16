@@ -1,12 +1,15 @@
 #!/bin/bash
 
-while getopts ":H:D" opt; do
+while getopts HD opt; do
     case $opt in
       H)
         MOUNTHOME=1
         ;;
       D)
         DAEMON=1
+        ;;
+      \?)
+        break
         ;;
     esac
 done
