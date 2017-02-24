@@ -26,7 +26,6 @@ fi
 shift $(expr $OPTIND - 1 )
 
 APPNAME=$(basename $PWD)
-EXISTS=$(docker ps -a --format="{{.Names}}" | grep "^"${APPNAME}"$")
 DOCKERCMD='docker run '
 
 function EXISTS {
@@ -42,7 +41,7 @@ function PORT {
         URL=$(docker port $APPNAME | cut -d" " -f3)
         echo "Files in this directory are available under the following URLs"
         echo "    applications: http://${URL}"
-        echo "    reusable components: http://${URL}/components/press-kiosk-app/"
+        echo "    reusable components: http://${URL}/components/${APPNAME}/"
         exit 0
     fi
 }
@@ -52,7 +51,7 @@ if [ "$1" == "port" ]; then
 fi
 
 if [ "$1" == "stop" ]; then
-    if [ -z $EXISTS ]; then
+    if [ -z $(EXISTS) ]; then
         echo ${APPNAME}" is not running"
         exit 0
     else
@@ -62,7 +61,7 @@ if [ "$1" == "stop" ]; then
     fi
 fi
 
-if [ -z $EXISTS ]; then
+if [ -z $(EXISTS) ]; then
     DOCKERCMD='docker run '
     OPTION='-v '$PWD':/app -P --name '$APPNAME
     if [[ $DAEMON ]]; then
