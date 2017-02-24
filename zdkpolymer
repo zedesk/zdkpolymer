@@ -1,6 +1,6 @@
 #!/bin/bash
 
-while getopts HD opt; do
+while getopts HDV: opt; do
     case $opt in
       H)
         MOUNTHOME=1
@@ -8,36 +8,78 @@ while getopts HD opt; do
       D)
         DAEMON=1
         ;;
+      V)
+        VERSION=$OPTARG
+        ;;
       \?)
         break
         ;;
     esac
 done
 
+if [ -z $VERSION ]; then
+  AVAILABLE=$(docker image ls --format "{{.Tag}}" zedesk/zdkpolymer)
+  VERSION=$(echo $AVAILABLE | cut -d" " -f 1)
+fi
+
 # get remaining args
 shift $(expr $OPTIND - 1 )
 
 APPNAME=$(basename $PWD)
-EXISTS=$(docker ps -a --format="{{.Names}}" | grep ${APPNAME})
+EXISTS=$(docker ps -a --format="{{.Names}}" | grep "^"${APPNAME}"$")
 DOCKERCMD='docker run '
 
+function EXISTS {
+    echo $(docker ps -a --format="{{.Names}}" | grep "^"${APPNAME}"$")
+}
+
+function PORT {
+    local exists=$(EXISTS)
+    if [ -z $exists ]; then
+        echo ${APPNAME}" is not running"
+        exit 0
+    else
+        URL=$(docker port $APPNAME | cut -d" " -f3)
+        echo "Files in this directory are available under the following URLs"
+        echo "    applications: http://${URL}"
+        echo "    reusable components: http://${URL}/components/press-kiosk-app/"
+        exit 0
+    fi
+}
+
 if [ "$1" == "port" ]; then
-    docker port $APPNAME
-    exit 0
+    PORT
+fi
+
+if [ "$1" == "stop" ]; then
+    if [ -z $EXISTS ]; then
+        echo ${APPNAME}" is not running"
+        exit 0
+    else
+        docker rm -fv ${APPNAME} > /dev/null
+        echo ${APPNAME}" is shutdown"
+        exit 0
+    fi
 fi
 
 if [ -z $EXISTS ]; then
     DOCKERCMD='docker run '
-    OPTION=' --rm -v '$PWD':/app -P --name '$APPNAME
+    OPTION='-v '$PWD':/app -P --name '$APPNAME
     if [[ $DAEMON ]]; then
-      OPTION=' -d'$OPTION
+      OPTION=' -d '$OPTION
     else
-      OPTION=' -it'$OPTION
+      OPTION=' -it --rm '$OPTION
     fi
     if [[ $MOUNTHOME ]]; then
         OPTION+=' -v '$HOME':/home/web'
     fi
-    ${DOCKERCMD} ${OPTION} zedesk/zdkpolymer $@
+
+    if [[ $DAEMON ]]; then
+        ${DOCKERCMD} ${OPTION} zedesk/zdkpolymer:${VERSION} serve $@ > /dev/null
+        PORT
+    else
+        ${DOCKERCMD} ${OPTION} zedesk/zdkpolymer:${VERSION} $@
+    fi
 else
     if [ $# != 0 ]; then
         DOCKERCMD='docker exec -it '$APPNAME' entrypoint.sh'
