@@ -48,7 +48,7 @@ zdkpolymer [OPTIONS] [CMD] [CMDARGS]
 
 Available options are :
 
- - __-D__ : run the container in background, and serves the application on an arbitrary port. there is no CMD in this case, and CMDARGS is the directory used as DOCUMENT ROOT.
+ - __-D__ : run the container in background, and serves the application on an arbitrary port. there is no CMD in this case, and CMDARGS is the directory used as DOCUMENT ROOT. see below
  - __-H__ : allows to mount the user home directory, it could be usefull when using dependencies from a git directory and use the user credentials
  - __-V [version]__ : allows to choose the image version of `zedesk/zdkpolymer`, without this option, the command line helper will use the most recent image.
 
@@ -85,6 +85,18 @@ install dependencies
 serve it
 
     zdkpolymer -D
+
+# build and serve
+
+to build a polymer application :
+
+    zdkpolymer build
+
+then to serve the application
+
+    # stop the container if exists
+    zdkpolymer stop
+    zdkpolymer -D build/unbundled
 
 [1]: https://github.com/zedesk/zdkpolymer/blob/v0.17.0/Dockerfile
 [2]: https://github.com/zedesk/zdkpolymer/blob/v0.18.0-alpha.9/Dockerfile
