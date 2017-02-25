@@ -34,8 +34,8 @@ available commands are :
 A command line helper is also provided, to avoid typing long docker commands. To get it :
 
 ```bash
-curl https://raw.githubusercontent.com/zedesk/zdkpolymer/master/zdkpolymer |sudo tee /usr/bin/local/zdkpolymer
-sudo chmod a+x zdkpolymer
+curl https://raw.githubusercontent.com/zedesk/zdkpolymer/master/zdkpolymer |sudo tee /usr/local/bin/zdkpolymer > /dev/null
+sudo chmod a+x /usr/local/bin/zdkpolymer
 ```
 
 ## How to use it
