@@ -1,8 +1,6 @@
 FROM mhart/alpine-node:6.10
 
-MAINTAINER F. Le Coz <fabrice.lecoz@zedesk.net>
-
-ENV POLYMER_CLI_VERSION=0.18.0-pre.10
+ENV POLYMER_CLI_VERSION=0.18.0-pre.13
 ENV BOWER_VERSION=1.8.0
 
 RUN apk add -U --virtual tools git sudo bash openssh-client && \
@@ -13,7 +11,8 @@ RUN apk add -U --virtual tools git sudo bash openssh-client && \
 
 COPY entrypoint.sh /usr/local/bin
 
-LABEL POLYMER_CLI_VERSION=${POLYMER_CLI_VERSION} \
+LABEL MAINTAINER="F. Le Coz <fabrice.lecoz@zedesk.net>" \
+      POLYMER_CLI_VERSION=${POLYMER_CLI_VERSION} \
       NODE_VERSION="6.10" \
       NPM_VERSION="3" \
       BOWER_VERSION=${BOWER_VERSION}
