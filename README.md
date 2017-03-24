@@ -6,7 +6,8 @@ The entrypoint of this container is polymer (polymer-cli command line) and some 
 
 ## Supported tags and respective Dockerfile links
 
- - [0.18.0-pre.13, latest][4]
+ - [0.18.0-pre.15, 0.18.0-pre, latest][5]
+ - [0.18.0-pre.13][4]
  - [0.18.0-pre.10][3]
  - [0.18.0-alpha.9][2]
  - [0.17.0][1]
@@ -106,5 +107,6 @@ then to serve the application
 [2]: https://github.com/zedesk/zdkpolymer/blob/v0.18.0-alpha.9/Dockerfile
 [3]: https://github.com/zedesk/zdkpolymer/blob/0.18.0-pre.10/Dockerfile
 [4]: https://github.com/zedesk/zdkpolymer/blob/0.18.0-pre.13/Dockerfile
+[5]: https://github.com/zedesk/zdkpolymer/blob/0.18.0-pre.15/Dockerfile
 [polymer-cli-doc]: https://github.com/Polymer/docs/blob/ff74953fa93ad41d659a6f5a14c5f7072368edbd/app/2.0/docs/tools/polymer-json.md#builds
 [polymer-project]: https://www.polymer-project.org/
