@@ -1,6 +1,6 @@
 FROM mhart/alpine-node:6.10
 
-ENV POLYMER_CLI_VERSION=0.18.0
+ENV POLYMER_CLI_VERSION=0.18.1
 ENV BOWER_VERSION=1.8.0
 
 RUN apk add -U --virtual tools git sudo bash openssh-client && \
