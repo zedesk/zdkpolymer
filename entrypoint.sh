@@ -10,8 +10,26 @@ do
     fi
 done
 
-if [ "$1" != "" ]; then
-  polymer "$@"
-else
-  polymer serve -H 0.0.0.0
-fi
+case "$1" in
+  "")
+    polymer serve -H 0.0.0.0 -p 8080
+    ;;
+  help)
+    if [[ $# -ne 1 ]]; then
+      shift
+      polymer help "$@"
+    else
+      echo -e "\033[1m\033[4mAvailable bower commands :\033[0m"
+      for item in $bower_cmd; do echo "  - ${item}"; done
+      echo ""
+      polymer help
+    fi
+    ;;
+  serve)
+    shift
+    polymer serve -H 0.0.0.0 -p 8080 "$@"
+    ;;
+  *)
+    polymer "$@"
+    ;;
+esac
