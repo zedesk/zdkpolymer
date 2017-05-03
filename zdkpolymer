@@ -1,6 +1,29 @@
 #!/bin/bash
 
-while getopts HDV: opt; do
+AVAILABLE=$(docker image ls --format "{{.Tag}}" zedesk/zdkpolymer | sort -r )
+
+function USAGE {
+  echo "Usage :"
+  echo "    zdkpolymer -h : this help"
+  echo "    zdkpolymer -v : list available versions"
+  echo ""
+  echo "    zdkpolymer [OPTIONS] [COMMAND]"
+  echo ""
+  echo "Options :"
+  echo "  -H : mount your home directory, useful to share some git credential "
+  echo "       and config into the container"
+  echo "  -D : run the container in background, useful when serving your work,"
+  echo "       The available URLs will be displayed"
+  echo "  -V [arg] : allow to select the zdkpolymer version,"
+  echo "      for example '0.18.1'"
+  echo ""
+  echo "Command : "
+  echo "  any polymer-cli or bower commands, to obtain the list of the"
+  echo "  available commands :"
+  echo "    zdkpolymer help"
+}
+
+while getopts :HDV:vh opt; do
     case $opt in
       H)
         MOUNTHOME=1
@@ -11,6 +34,27 @@ while getopts HDV: opt; do
       V)
         VERSION=$OPTARG
         ;;
+      h)
+        USAGE
+        exit 0
+        ;;
+      v)
+        echo "Available versions : "
+        for item in $AVAILABLE; do echo "  - ${item}"; done
+        exit 0
+        ;;
+        #This case occurs only in SILENT mode
+      :)
+        if [ $OPTARG == "V" ]; then
+          VERSION=$(echo $AVAILABLE | cut -d" " -f 1)
+          echo "version : "${VERSION}
+          exit 0
+        else
+          echo -e "Argument not provided for option -${OPTARG} \n"
+          USAGE
+          exit 1; #Its recommended to exit to prevent any erronous processing
+        fi
+        ;;
       \?)
         break
         ;;
@@ -18,8 +62,8 @@ while getopts HDV: opt; do
 done
 
 if [ -z $VERSION ]; then
-  AVAILABLE=$(docker image ls --format "{{.Tag}}" zedesk/zdkpolymer)
   VERSION=$(echo $AVAILABLE | cut -d" " -f 1)
+  echo "version : "${VERSION}
 fi
 
 # get remaining args

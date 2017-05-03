@@ -2,15 +2,10 @@
 
 A docker container to develop with polymer-cli
 
-The entrypoint of this container is polymer (polymer-cli command line) and some bower commands. By default the image run the "polymer serve"
-
 ## Supported tags and respective Dockerfile links
 
- - [0.18.0, latest][6]
- - [0.18.0-pre.15, 0.18.0-pre][5]
- - [0.18.0-pre.13][4]
- - [0.18.0-pre.10][3]
- - [0.18.0-alpha.9][2]
+ - [0.18, 0.18.1, latest][7]
+ - [0.18.0][6]
  - [0.17.0][1]
 
 The polymer-cli version includes several improvements see the [lastest polymer-cli documentation][polymer-cli-doc]
@@ -19,6 +14,8 @@ The polymer-cli version includes several improvements see the [lastest polymer-c
 > Polymer 2.0 is coming soon, the [polymer project][polymer-project] web site already presents the features of the 2.0 version as default.
 
 ## commands
+
+The entrypoint of this container is polymer (polymer-cli command line) and some bower commands. By default the image run the "polymer serve"
 
 available commands are :
 
@@ -48,19 +45,20 @@ sudo chmod a+x /usr/local/bin/zdkpolymer
 
 the `zdkpolymer` command helper should be run from the project directory. The container will be named as the directory.
 
-```bash
-zdkpolymer [OPTIONS] [CMD] [CMDARGS]
-```
+ - `zdkpolymer -h` : the helper help
+ - `zdkpolymer -v` : list available versions
+ - `zdkpolymer [OPTIONS] [COMMAND]`
 
-Available options are :
+Options :
 
- - __-D__ : run the container in background, and serves the application on an arbitrary port. there is no CMD in this case, and CMDARGS is the directory used as DOCUMENT ROOT. see below
- - __-H__ : allows to mount the user home directory, it could be usefull when using dependencies from a git directory and use the user credentials
- - __-V [version]__ : allows to choose the image version of `zedesk/zdkpolymer`, without this option, the command line helper will use the most recent image.
+ - __-H__ : mount your home directory, useful to share some git credential and config into the container
+ - __-D__ : run the container in background, useful when serving your work, The available URLs will be displayed.
+ - __-V [arg]__ : allow to select the zdkpolymer version, for example '0.17.0'
 
-Available commands :
+Command :
 
-  - see commands above
+Any polymer-cli or bower commands, to obtain the list of the
+available commands : `zdkpolymer help`
 
 ### fresh dev
 
@@ -104,11 +102,8 @@ then to serve the application
     zdkpolymer stop
     zdkpolymer -D build/unbundled
 
-[1]: https://github.com/zedesk/zdkpolymer/blob/v0.17.0/Dockerfile
-[2]: https://github.com/zedesk/zdkpolymer/blob/v0.18.0-alpha.9/Dockerfile
-[3]: https://github.com/zedesk/zdkpolymer/blob/0.18.0-pre.10/Dockerfile
-[4]: https://github.com/zedesk/zdkpolymer/blob/0.18.0-pre.13/Dockerfile
-[5]: https://github.com/zedesk/zdkpolymer/blob/0.18.0-pre.15/Dockerfile
+[1]: https://github.com/zedesk/zdkpolymer/blob/0.17.0/Dockerfile
 [6]: https://github.com/zedesk/zdkpolymer/blob/0.18.0/Dockerfile
+[7]: https://github.com/zedesk/zdkpolymer/blob/0.18.1/Dockerfile
 [polymer-cli-doc]: https://github.com/Polymer/docs/blob/ff74953fa93ad41d659a6f5a14c5f7072368edbd/app/2.0/docs/tools/polymer-json.md#builds
 [polymer-project]: https://www.polymer-project.org/
