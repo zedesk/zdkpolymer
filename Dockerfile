@@ -1,4 +1,4 @@
-FROM mhart/alpine-node:6.9.4
+FROM mhart/alpine-node:6.10
 
 MAINTAINER F. Le Coz <fabrice.lecoz@zedesk.net>
 
@@ -14,7 +14,7 @@ RUN apk add -U --virtual tools git sudo bash openssh-client && \
 COPY entrypoint.sh /usr/local/bin
 
 LABEL POLYMER_VERSION=${POLYMER_VERSION} \
-      NODE_VERSION="6.9.4" \
+      NODE_VERSION="6.10" \
       NPM_VERSION="3" \
       BOWER_VERSION=${BOWER_VERSION}
 
