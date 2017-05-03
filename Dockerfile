@@ -1,9 +1,13 @@
 FROM mhart/alpine-node:6.10
 
-MAINTAINER F. Le Coz <fabrice.lecoz@zedesk.net>
-
 ENV POLYMER_CLI_VERSION=0.17.0
 ENV BOWER_VERSION=1.8.0
+
+LABEL MAINTAINER="F. Le Coz <fabrice.lecoz@zedesk.net>" \
+      POLYMER_VERSION=${POLYMER_CLI_VERSION} \
+      NODE_VERSION="6.10" \
+      NPM_VERSION="3" \
+      BOWER_VERSION=${BOWER_VERSION}
 
 RUN apk add -U --virtual tools git sudo bash openssh-client && \
     adduser -D web && \
@@ -12,11 +16,6 @@ RUN apk add -U --virtual tools git sudo bash openssh-client && \
     echo 'export PS1="\W > "' > /home/web/.bashrc
 
 COPY entrypoint.sh /usr/local/bin
-
-LABEL POLYMER_VERSION=${POLYMER_VERSION} \
-      NODE_VERSION="6.10" \
-      NPM_VERSION="3" \
-      BOWER_VERSION=${BOWER_VERSION}
 
 # Drop privileges
 USER web
