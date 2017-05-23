@@ -106,6 +106,6 @@ then to serve the application
 [1]: https://github.com/zedesk/zdkpolymer/blob/0.17.0/Dockerfile
 [6]: https://github.com/zedesk/zdkpolymer/blob/0.18.0/Dockerfile
 [7]: https://github.com/zedesk/zdkpolymer/blob/0.18.1/Dockerfile
-[8]: https://github.com/zedesk/zdkpolymer/blob/1.0.0/Dockerfile
+[8]: https://github.com/zedesk/zdkpolymer/blob/1.0.2/Dockerfile
 [polymer-cli-doc]: https://github.com/Polymer/docs/blob/ff74953fa93ad41d659a6f5a14c5f7072368edbd/app/2.0/docs/tools/polymer-json.md#builds
 [polymer-project]: https://www.polymer-project.org/
