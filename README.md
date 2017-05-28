@@ -4,15 +4,16 @@ A docker container to develop with polymer-cli
 
 ## Supported tags and respective Dockerfile links
 
- - [1.0, 1.0.2, latest][8]
- - [0.18, 0.18.1, latest][7]
+ - [1.1, 1.1.0, latest][9]
+ - [1.0, 1.0.2][8]
+ - [0.18, 0.18.1][7]
  - [0.18.0][6]
  - [0.17.0][1]
 
 The polymer-cli version includes several improvements see the [lastest polymer-cli documentation][polymer-cli-doc]
 
 > ### Last news
-> Polymer 2.0 is now out and comes with polymer-cli 1.0
+> Polymer 2.0 is now out and comes with polymer-cli 1.1
 
 ## commands
 
@@ -107,5 +108,6 @@ then to serve the application
 [6]: https://github.com/zedesk/zdkpolymer/blob/0.18.0/Dockerfile
 [7]: https://github.com/zedesk/zdkpolymer/blob/0.18.1/Dockerfile
 [8]: https://github.com/zedesk/zdkpolymer/blob/1.0.2/Dockerfile
+[9]: https://github.com/zedesk/zdkpolymer/blob/1.1.0/Dockerfile
 [polymer-cli-doc]: https://github.com/Polymer/docs/blob/ff74953fa93ad41d659a6f5a14c5f7072368edbd/app/2.0/docs/tools/polymer-json.md#builds
 [polymer-project]: https://www.polymer-project.org/
