@@ -82,7 +82,7 @@ function PORT {
         echo ${APPNAME}" is not running"
         exit 0
     else
-        URL=$(docker port $APPNAME | cut -d" " -f3)
+        URL=$(docker port $APPNAME 8081 | cut -d" " -f3)
         echo "Files in this directory are available under the following URLs"
         echo "    applications: http://${URL}"
         echo "    reusable components: http://${URL}/components/${APPNAME}/"
@@ -114,7 +114,15 @@ if [ -z $(EXISTS) ]; then
       OPTION=' -it --rm '$OPTION
     fi
     if [[ $MOUNTHOME ]]; then
-        OPTION+=' -v '$HOME':/home/web'
+        POLYMER_VERSION=$(docker inspect -f "{{.Config.Labels.POLYMER_CLI_VERSION}}" zedesk/zdkpolymer:${VERSION})
+        echo 'Version : '$POLYMER_VERSION
+        if [ $POLYMER_VERSION == "1.2.0" ]; then
+            echo '/home/node'
+            OPTION+=' -v '$HOME':/home/node'
+        else
+            echo '/home/web'
+            OPTION+=' -v '$HOME':/home/web'
+        fi
     fi
 
     if [[ $DAEMON ]]; then
