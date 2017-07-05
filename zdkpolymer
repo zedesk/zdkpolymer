@@ -110,7 +110,6 @@ if [ "$1" == "stop" ]; then
 fi
 
 if [ -z $(EXISTS) ]; then
-    echo 'Version : '$POLYMER_VERSION
     DOCKERCMD='docker run '
     OPTION='-v '$PWD':/app -P --name '$APPNAME
     if [[ $DAEMON ]]; then
@@ -128,6 +127,9 @@ if [ -z $(EXISTS) ]; then
         fi
     fi
 
+    if [ $# -eq 0 ]; then
+        echo 'Version : '$POLYMER_VERSION
+    fi
     if [[ $DAEMON ]]; then
         ${DOCKERCMD} ${OPTION} zedesk/zdkpolymer:${VERSION} serve $@ > /dev/null
         PORT
