@@ -15,7 +15,7 @@ case "$1" in
     polymer serve -H 0.0.0.0 -p 8081
     ;;
   help)
-    if [[ $# > 1 ]]; then
+    if [ $# -gt 1 ]; then
       shift
       polymer help "$@"
     else
@@ -28,6 +28,10 @@ case "$1" in
   serve)
     shift
     polymer serve -H 0.0.0.0 -p 8081 "$@"
+    ;;
+  docs)
+    shift
+    polymer analyze | filterDoc
     ;;
   *)
     polymer "$@"

@@ -1,3 +1,8 @@
+## 1.3.0
+  
+  - update polymer-cli to 1.2.0
+  - update command line helper
+    - add a special command `zdkpolymer docs` to get analysis metadata without iherited methods from `Polymer.element`
 
 ## 1.2.0
 
