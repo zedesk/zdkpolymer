@@ -11,6 +11,7 @@ RUN apk add -U --virtual tools git sudo bash openssh-client && \
 ENV PATH /home/node/.npm-packages/bin:$PATH
 
 COPY entrypoint.sh /usr/local/bin
+COPY filterDoc.js /usr/local/bin/filterDoc
 
 LABEL MAINTAINER="F. Le Coz <fabrice.lecoz@zedesk.net>" \
       POLYMER_CLI_VERSION=${POLYMER_CLI_VERSION} \

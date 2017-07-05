@@ -29,6 +29,10 @@ case "$1" in
     shift
     polymer serve -H 0.0.0.0 -p 8081 "$@"
     ;;
+  docs)
+    shift
+    polymer analyze | filterDoc
+    ;;
   *)
     polymer "$@"
     ;;
