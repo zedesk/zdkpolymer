@@ -4,11 +4,10 @@ A docker container to develop with polymer-cli
 
 ## Supported tags and respective Dockerfile links
 
- - [1.2, 1.2.0, latest][10]
+ - [1.3, 1.3.0, latest][11]
+ - [1.2, 1.2.0][10]
  - [1.1, 1.1.0][9]
  - [1.0, 1.0.2][8]
- - [0.18, 0.18.1][7]
- - [0.18.0][6]
  - [0.17.0][1]
 
 The polymer-cli version includes several improvements see the [lastest polymer-cli documentation][polymer-cli-doc]
@@ -18,12 +17,16 @@ The polymer-cli version includes several improvements see the [lastest polymer-c
 The entrypoint of this container is polymer (polymer-cli command line) and some bower commands. By default the image run the "polymer serve"
 
 available commands are :
-
+  
+  - Special command :
+    - __docs__ : Writes analysis metadata in JSON format to standard out without inherited methods from Polymer.element
   - Polymer commands :
     - __init__ : initialize a developpment ( run polymer init )
     - __build__ : build the application
     - __lint__ : lints the project
     - __serve__ : Runs the polyserve development server
+    - __analyze__ : Writes analysis metadata in JSON format to standard out
+    - __lint__ : Identifies potential errors in your code.
   - Bower commands :
     - __install [_package_]__: install dependencies declared in bower.json or the package given on the command line
     - __uninstall _package___ : uninstall a package
@@ -108,5 +111,6 @@ then to serve the application
 [8]: https://github.com/zedesk/zdkpolymer/blob/1.0.2/Dockerfile
 [9]: https://github.com/zedesk/zdkpolymer/blob/1.1.0/Dockerfile
 [10]: https://github.com/zedesk/zdkpolymer/blob/1.2.0/Dockerfile
+[11]: https://github.com/zedesk/zdkpolymer/blob/1.3.0/Dockerfile
 [polymer-cli-doc]: https://github.com/Polymer/docs/blob/ff74953fa93ad41d659a6f5a14c5f7072368edbd/app/2.0/docs/tools/polymer-json.md#builds
 [polymer-project]: https://www.polymer-project.org/
