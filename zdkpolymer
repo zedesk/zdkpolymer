@@ -63,7 +63,7 @@ done
 
 if [ -z $VERSION ]; then
   VERSION=$(echo $AVAILABLE | cut -d" " -f 1)
-  echo "version : "${VERSION}
+  POLYMER_VERSION=$(docker inspect -f "{{.Config.Labels.POLYMER_CLI_VERSION}}" zedesk/zdkpolymer:${VERSION})
 fi
 
 # get remaining args
@@ -90,6 +90,10 @@ function PORT {
     fi
 }
 
+function getversion { 
+    echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; 
+}
+
 if [ "$1" == "port" ]; then
     PORT
 fi
@@ -106,6 +110,7 @@ if [ "$1" == "stop" ]; then
 fi
 
 if [ -z $(EXISTS) ]; then
+    echo 'Version : '$POLYMER_VERSION
     DOCKERCMD='docker run '
     OPTION='-v '$PWD':/app -P --name '$APPNAME
     if [[ $DAEMON ]]; then
@@ -114,13 +119,11 @@ if [ -z $(EXISTS) ]; then
       OPTION=' -it --rm '$OPTION
     fi
     if [[ $MOUNTHOME ]]; then
-        POLYMER_VERSION=$(docker inspect -f "{{.Config.Labels.POLYMER_CLI_VERSION}}" zedesk/zdkpolymer:${VERSION})
-        echo 'Version : '$POLYMER_VERSION
-        if [ $POLYMER_VERSION == "1.2.0" ]; then
-            echo '/home/node'
+        if [ $(getversion $POLYMER_VERSION) -ge $(getversion "1.2.0") ]; then
+            # echo '/home/node'
             OPTION+=' -v '$HOME':/home/node'
         else
-            echo '/home/web'
+            # echo '/home/web'
             OPTION+=' -v '$HOME':/home/web'
         fi
     fi
