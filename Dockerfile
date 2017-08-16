@@ -1,6 +1,6 @@
-FROM node:6.11.1-alpine
+FROM node:6.11.2-alpine
 
-ENV POLYMER_CLI_VERSION=1.3.1
+ENV POLYMER_CLI_VERSION=1.4.1
 ENV BOWER_VERSION=1.8.0
 
 RUN apk add -U --virtual .tools git sudo bash openssh-client && \
@@ -15,7 +15,7 @@ COPY filterDoc.js /usr/local/bin/filterDoc
 
 LABEL MAINTAINER="F. Le Coz <fabrice.lecoz@zedesk.net>" \
       POLYMER_CLI_VERSION=${POLYMER_CLI_VERSION} \
-      NODE_VERSION="6.11.1" \
+      NODE_VERSION="6.11.2" \
       NPM_VERSION="3.10.10" \
       BOWER_VERSION=${BOWER_VERSION}
 
