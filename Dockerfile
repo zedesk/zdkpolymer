@@ -1,6 +1,6 @@
 FROM node:6.11.2-alpine
 
-ENV POLYMER_CLI_VERSION=1.4.1
+ENV POLYMER_CLI_VERSION=1.5.1
 ENV BOWER_VERSION=1.8.0
 
 RUN apk add -U --virtual .tools git sudo bash openssh-client && \
