@@ -27,7 +27,12 @@ case "$1" in
     ;;
   serve)
     shift
-    polymer serve -H 0.0.0.0 -p 8081 "$@"
+    if [ "$1" == "build" ]; then
+      shift
+      polymer serve -H 0.0.0.0 -p 8080 "build/$@"
+    else
+      polymer serve -H 0.0.0.0 -p 8081 "$@"
+    fi
     ;;
   docs)
     shift

@@ -24,5 +24,5 @@ USER node
 
 VOLUME ["/app","/home/node"]
 WORKDIR "/app"
-EXPOSE 8081
+EXPOSE 8081 8080
 ENTRYPOINT ["entrypoint.sh"]
