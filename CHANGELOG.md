@@ -1,3 +1,6 @@
+## 1.5.4
+  - update polymer-cli to 1.5.4
+
 ## 1.5.2
   - update polymer-cli to 1.5.2
 
