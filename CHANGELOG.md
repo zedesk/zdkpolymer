@@ -1,3 +1,8 @@
+## 1.5.5
+  - update polymer-cli to 1.5.5
+  - update node to 8.7.0
+  - expose port 8080 to serve builded app
+
 ## 1.5.4
   - update polymer-cli to 1.5.4
 
