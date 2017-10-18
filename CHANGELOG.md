@@ -1,3 +1,6 @@
+## 1.5.6
+  - update polymer-cli to 1.5.6
+
 ## 1.5.5
   - update polymer-cli to 1.5.5
   - update node to 8.7.0
