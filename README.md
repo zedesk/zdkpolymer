@@ -1,5 +1,10 @@
 # zdkpolymer
 
+[![](https://images.microbadger.com/badges/version/zedesk/zdkpolymer.svg)](https://microbadger.com/images/zedesk/zdkpolymer "Get your own version badge on microbadger.com")
+[![](https://images.microbadger.com/badges/image/zedesk/zdkpolymer.svg)](https://microbadger.com/images/zedesk/zdkpolymer "Get your own image badge on microbadger.com")
+[![Docker Automated buil](https://img.shields.io/docker/automated/jrottenberg/ffmpeg.svg)](https://hub.docker.com/r/zedesk/zdkpolymer/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/zedesk/zdkpolymer.svg)](https://hub.docker.com/r/zedesk/zdkpolymer/)
+
 A docker container to develop with polymer-cli
 
 ## Supported tags and respective Dockerfile links
