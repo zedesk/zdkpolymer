@@ -1,4 +1,4 @@
-FROM node:8.4.0-alpine
+FROM node:8.7.0-alpine
 
 ENV POLYMER_CLI_VERSION=1.5.4
 ENV BOWER_VERSION=1.8.0
