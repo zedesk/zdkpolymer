@@ -1,6 +1,12 @@
 #!/bin/bash
 
-AVAILABLE=$(docker image ls --format "{{.Tag}}" zedesk/zdkpolymer | sort -r )
+##
+# zdkpolymer helper command
+##
+
+##
+# get the repository name as application name
+APPNAME=$(basename $PWD)
 
 function USAGE {
   echo "Usage :"
@@ -12,8 +18,11 @@ function USAGE {
   echo "Options :"
   echo "  -H : mount your home directory, useful to share some git credential "
   echo "       and config into the container"
+  echo "       WARNING : this option is available only if no container is running"
+  echo "         in daemon mode"
   echo "  -D : run the container in background, useful when serving your work,"
   echo "       The available URLs will be displayed"
+  echo "       WARNING : it's possible to run only one instance in background"
   echo "  -V [arg] : allow to select the zdkpolymer version,"
   echo "      for example '0.18.1'"
   echo ""
@@ -21,6 +30,73 @@ function USAGE {
   echo "  any polymer-cli or bower commands, to obtain the list of the"
   echo "  available commands :"
   echo "    zdkpolymer help"
+}
+
+##
+# Check if the current container already exists
+# if so, return the container name
+function exists {
+  echo $(docker ps -a --format="{{.Names}}" | grep "^"${APPNAME}"$")
+}
+
+##
+# get the list of available versions installed on the system
+function available {
+  echo $(docker image ls --format "{{.Tag}}" zedesk/zdkpolymer | sort -r )
+}
+
+function PORT {
+  local exists=$(exists)
+  if [ -z $exists ]; then
+    echo ${APPNAME}" is not running"
+    exit 0
+  else
+    if [[ -z $1 ]]; then
+      docker port $APPNAME
+    else
+      URL=$(docker port $APPNAME $1 | cut -d" " -f3)
+      echo "Files in this directory are available under the following URLs"
+      echo "    applications: http://${URL}"
+      echo "    reusable components: http://${URL}/components/${APPNAME}/"
+    fi
+  fi
+}
+
+function getversion { 
+    echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; 
+}
+
+##
+# serve the application to the right port
+function serve {
+    # echo "-> "$1 $@ $DOCKERCMD
+    if [[ $1 == build* ]]; then
+      echo 'run build ('$1') site'
+      # echo ${DOCKERCMD} serve $@ -H 0.0.0.0 -p 8080
+      if [[ ! $DAEMON ]]; then
+        echo "to get the port, type in another shell"
+        echo "    zdkpolymer port 8080"
+      fi
+      ${DOCKERCMD} serve $@ -H 0.0.0.0 -p 8080 > /dev/null
+      if [[ $? != 0 ]]; then
+        exit 1
+      else
+        [ $(exists) ] && PORT 8080
+      fi
+    else
+      echo "run dev site"
+      # echo ${DOCKERCMD} serve -H 0.0.0.0
+      if [[ ! $DAEMON ]]; then
+        echo "to get the port, type in another shell"
+        echo "    zdkpolymer port 8081"
+      fi
+      ${DOCKERCMD} serve -H 0.0.0.0 2>/dev/null
+      if [[ $? != 0 ]]; then
+        exit 1
+      else
+        [ $(exists) ] && PORT 8081
+      fi
+    fi
 }
 
 while getopts :HDV:vh opt; do
@@ -40,13 +116,13 @@ while getopts :HDV:vh opt; do
         ;;
       v)
         echo "Available versions : "
-        for item in $AVAILABLE; do echo "  - ${item}"; done
+        for item in $(available); do echo "  - ${item}"; done
         exit 0
         ;;
         #This case occurs only in SILENT mode
       :)
         if [ $OPTARG == "V" ]; then
-          VERSION=$(echo $AVAILABLE | cut -d" " -f 1)
+          VERSION=$(available | cut -d" " -f 1)
           echo "version : "${VERSION}
           exit 0
         else
@@ -61,45 +137,14 @@ while getopts :HDV:vh opt; do
     esac
 done
 
-if [ -z $VERSION ]; then
-  VERSION=$(echo $AVAILABLE | cut -d" " -f 1)
-  POLYMER_VERSION=$(docker inspect -f "{{.Config.Labels.POLYMER_CLI_VERSION}}" zedesk/zdkpolymer:${VERSION})
+if [[ $1 == "port" ]]; then
+  shift
+  PORT $@
+  exit 0
 fi
 
-# get remaining args
-shift $(expr $OPTIND - 1 )
-
-APPNAME=$(basename $PWD)
-DOCKERCMD='docker run '
-
-function EXISTS {
-    echo $(docker ps -a --format="{{.Names}}" | grep "^"${APPNAME}"$")
-}
-
-function PORT {
-    local exists=$(EXISTS)
-    if [ -z $exists ]; then
-        echo ${APPNAME}" is not running"
-        exit 0
-    else
-        URL=$(docker port $APPNAME 8081 | cut -d" " -f3)
-        echo "Files in this directory are available under the following URLs"
-        echo "    applications: http://${URL}"
-        echo "    reusable components: http://${URL}/components/${APPNAME}/"
-        exit 0
-    fi
-}
-
-function getversion { 
-    echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; 
-}
-
-if [ "$1" == "port" ]; then
-    PORT
-fi
-
-if [ "$1" == "stop" ]; then
-    if [ -z $(EXISTS) ]; then
+if [[ $1 == "stop" ]]; then
+    if [ -z $(exists) ]; then
         echo ${APPNAME}" is not running"
         exit 0
     else
@@ -109,39 +154,54 @@ if [ "$1" == "stop" ]; then
     fi
 fi
 
-if [ -z $(EXISTS) ]; then
-    DOCKERCMD='docker run '
-    OPTION='-v '$PWD':/app -P --name '$APPNAME
-    if [[ $DAEMON ]]; then
-      OPTION=' -d '$OPTION
-    else
-      OPTION=' -it --rm '$OPTION
-    fi
-    if [[ $MOUNTHOME ]]; then
-        if [ $(getversion $POLYMER_VERSION) -ge $(getversion "1.2.0") ]; then
-            # echo '/home/node'
-            OPTION+=' -v '$HOME':/home/node'
-        else
-            # echo '/home/web'
-            OPTION+=' -v '$HOME':/home/web'
-        fi
-    fi
+if [ -z $VERSION ]; then
+  VERSION=$(available | cut -d" " -f 1)
+  POLYMER_VERSION=$(docker inspect -f "{{.Config.Labels.POLYMER_CLI_VERSION}}" zedesk/zdkpolymer:${VERSION})
+fi
 
-    if [ $# -eq 0 ]; then
-        echo 'Version : '$POLYMER_VERSION
-    fi
-    if [[ $DAEMON ]]; then
-        ${DOCKERCMD} ${OPTION} zedesk/zdkpolymer:${VERSION} serve $@ > /dev/null
-        PORT
+if [ -z $(exists) ]; then
+  OPTION='-v '$PWD':/app -P --name '$APPNAME
+  if [[ $DAEMON ]]; then
+    OPTION=' -d '$OPTION
+  else
+    OPTION=' -it --rm '$OPTION
+  fi
+  if [[ $MOUNTHOME ]]; then
+    shift
+    if [ $(getversion $POLYMER_VERSION) -ge $(getversion "1.2.0") ]; then
+      # echo '/home/node'
+      OPTION+=' -v '$HOME':/home/node:ro'
     else
-        ${DOCKERCMD} ${OPTION} zedesk/zdkpolymer:${VERSION} $@
+      # echo '/home/web'
+      OPTION+=' -v '$HOME':/home/web:ro'
     fi
+  fi
+  DOCKERCMD='docker run '${OPTION}' zedesk/zdkpolymer:'${VERSION}
 else
+  DOCKERCMD='docker exec -it '$APPNAME' entrypoint.sh'
+fi
+
+echo 'Polymer version : '$POLYMER_VERSION
+
+if [[ $DAEMON ]]; then
+  shift
+  if [[ -z $1 || $1 == "serve" ]]; then
+    shift
+    serve $@
+  else
+    echo "something wrong"
+  fi
+else
+  if [[ $1 == "serve" ]]; then
+    shift
+    serve $@
+  else
     if [ $# != 0 ]; then
-        DOCKERCMD='docker exec -it '$APPNAME' entrypoint.sh'
-        ${DOCKERCMD} $@
+      echo ${DOCKERCMD} $@
+      ${DOCKERCMD} $@
     else
-        echo "container ${APPNAME} already running : need a command"
-        exit 1
+      echo "container ${APPNAME} already running : need a command"
+      exit 1
     fi
+  fi
 fi
