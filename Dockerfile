@@ -3,7 +3,7 @@ FROM node:8.7.0-alpine
 ARG BUILD_DATE
 ARG VCS_REF
 
-ENV POLYMER_CLI_VERSION=1.5.5
+ENV POLYMER_CLI_VERSION=1.5.6
 ENV BOWER_VERSION=1.8.0
 
 RUN apk add -U --virtual .tools git sudo bash openssh-client && \
