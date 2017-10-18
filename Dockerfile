@@ -1,6 +1,6 @@
-FROM node:8.4.0-alpine
+FROM node:8.7.0-alpine
 
-ENV POLYMER_CLI_VERSION=1.5.4
+ENV POLYMER_CLI_VERSION=1.5.5
 ENV BOWER_VERSION=1.8.0
 
 RUN apk add -U --virtual .tools git sudo bash openssh-client && \
@@ -24,5 +24,5 @@ USER node
 
 VOLUME ["/app","/home/node"]
 WORKDIR "/app"
-EXPOSE 8081
+EXPOSE 8081 8080
 ENTRYPOINT ["entrypoint.sh"]
